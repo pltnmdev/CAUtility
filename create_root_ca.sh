@@ -2,7 +2,7 @@
 
 # Helper Functions
 printUsage() {
-  echo "Usage: create_root_ca.sh <directory to place CA> [number of years CA cert is valid (default: 20)]"
+  echo "Usage: create_root_root.sh <directory to place CA> [number of years CA cert is valid (default: 20)]"
   echo ""
   return 0
 }
@@ -39,6 +39,7 @@ echo "CA cert will be valid for $caYears years ($caDays days)."
 mkdir -p $outputDirectory
 mkdir "$outputDirectory/certs"
 mkdir "$outputDirectory/crl"
+mkdir "$outputDirectory/csr"
 mkdir "$outputDirectory/newcerts"
 mkdir "$outputDirectory/private"
 
@@ -52,13 +53,19 @@ sed -i '' -e "s|%rootDir%|$absoluteOutputDirectory|g" "$outputDirectory/openssl.
 chmod 700 "$outputDirectory/private"
 
 # Generate CA private key
-openssl genrsa -aes256 -out "$outputDirectory/private/ca.key.pem" 4096
+openssl genrsa -aes256 -out "$outputDirectory/private/root.key.pem" 4096
+
+# Lock down the private key
+chmod 400 "$outputDirectory/private/root.key.pem"
 
 # Generate CA certificate
-openssl req -config "$outputDirectory/openssl.conf" -key "$outputDirectory/private/ca.key.pem" -new -x509 -days $caDays -sha256 -extensions v3_ca -out "$outputDirectory/certs/ca.cert.pem"
+openssl req -config "$outputDirectory/openssl.conf" -key "$outputDirectory/private/root.key.pem" -new -x509 -days $caDays -sha256 -extensions v3_ca -out "$outputDirectory/certs/root.cert.pem"
+
+# Lock down the public certificate
+chmod 444 "$outputDirectory/certs/root.cert.pem"
 
 # Generate a PKCS#12 archive
 echo "Exporting pkcs#12 archive of generated certificate and key..."
 echo "Entering a password may be required by some utilities when importing (ie. OS X Keychain)."
 
-openssl pkcs12 -export -out "$outputDirectory/private/archive.p12" -inkey "$outputDirectory/private/ca.key.pem" -in "$outputDirectory/certs/ca.cert.pem"
+openssl pkcs12 -export -out "$outputDirectory/private/archive.p12" -inkey "$outputDirectory/private/root.key.pem" -in "$outputDirectory/certs/root.cert.pem"
