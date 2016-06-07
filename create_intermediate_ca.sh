@@ -18,7 +18,7 @@
 
 # Helper Functions
 printUsage() {
-  echo "Usage: create_intermediate_intermediate.sh <directory to place CA> <directory containing the root CA> [number of years CA cert is valid (default: 10)]"
+  echo "Usage: create_intermediate_ca.sh <directory to place CA> <directory containing the root CA> [number of years CA cert is valid (default: 10)]"
   echo ""
   return 0
 }

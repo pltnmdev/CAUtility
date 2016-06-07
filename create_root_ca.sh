@@ -18,7 +18,7 @@
 
 # Helper Functions
 printUsage() {
-  echo "Usage: create_root_root.sh <directory to place CA> [number of years CA cert is valid (default: 20)]"
+  echo "Usage: create_root_ca.sh <directory to place CA> [number of years CA cert is valid (default: 20)]"
   echo ""
   return 0
 }
