@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (c) 2016, Platinum Supplemental Insurance, Inc.
 # All rights reserved.
