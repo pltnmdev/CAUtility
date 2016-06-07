@@ -25,9 +25,13 @@ printUsage() {
 
 # Paramters
 outputDirectory=$1
-absoluteOutputDirectory="`pwd`/$outputDirectory"
 caYears=$2
 scriptDirectory=`dirname $0`
+
+case $outputDirectory/ in
+  /*) absoluteOutputDirectory="$outputDirectory";;
+  *) absoluteOutputDirectory="$PWD/$outputDirectory";;
+esac
 
 if [[ ($1 == "help") || ($1 == "-help") || ($1 == "-h") || ($1 == "--help") ]]; then
   printUsage
@@ -52,7 +56,7 @@ echo "Generating root CA in $outputDirectory"
 echo "CA cert will be valid for $caYears years ($caDays days)."
 
 # Ensure CA directories exist
-mkdir -p $outputDirectory
+mkdir -p "$outputDirectory"
 mkdir "$outputDirectory/certs"
 mkdir "$outputDirectory/crl"
 mkdir "$outputDirectory/csr"
@@ -60,7 +64,9 @@ mkdir "$outputDirectory/newcerts"
 mkdir "$outputDirectory/private"
 
 # Copy files from the template into the CA directory
-cp -R "$scriptDirectory/.template/root/" $outputDirectory
+cp "$scriptDirectory/.template/root/index.txt" "$outputDirectory"
+cp "$scriptDirectory/.template/root/openssl.conf" "$outputDirectory"
+cp "$scriptDirectory/.template/root/serial" "$outputDirectory"
 
 # Modify the config file to point to our current directory
 sed -i '' -e "s|%rootDir%|$absoluteOutputDirectory|g" "$outputDirectory/openssl.conf"

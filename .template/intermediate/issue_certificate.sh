@@ -60,7 +60,7 @@ esac
 echo "Creating $certType certificate in $outputDir using certificate authority at $caDirectory."
 
 # Ensure the output directory exists
-mkdir -p $outputDir
+mkdir -p "$outputDir"
 
 if [[ -z $csrFile ]]; then
   echo "No CSR provided: generating a private key for this certificate."
@@ -74,10 +74,10 @@ fi
 
 # Make a copy of the CSR for future reference
 csrFileName=`basename $csrFile`
-cp $csrFile "$caDirectory/csr/${csrFileName%%.*}-$dateStamp.csr.pem"
+cp "$csrFile" "$caDirectory/csr/${csrFileName%%.*}-$dateStamp.csr.pem"
 
 # Generate the certificate
-openssl ca -config "$caDirectory/openssl.conf" -extensions $ca_extension -days 375 -notext -md sha256 -in $csrFile -out "$outputDir/public.cert.pem"
+openssl ca -config "$caDirectory/openssl.conf" -extensions $ca_extension -days 375 -notext -md sha256 -in "$csrFile" -out "$outputDir/public.cert.pem"
 
 # Generate a PKCS#12 archive if we generated the CSR
 if [[ $csrGenerated ]]; then
