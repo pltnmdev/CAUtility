@@ -3,6 +3,12 @@ CA Utility
 
 This set of bash scripts is designed to make setting up and managing an OpenSSL based certificate authority easier.
 
+Many thanks to [this article series](https://jamielinux.com/docs/openssl-certificate-authority/introduction.html) for helping me understand how certificate authorities with OpenSSL are supposed to work.  Much of the setup of the final CAs are based on input from this series.
+
+This repository is freely available to be forked and expanded upon.  We simply ask that if you do something cool with it, you send us a pull request so we can incorporate it into our version.
+
+See LICENSE for conditions on the use and distribution of this software.
+
 Creating a Root CA
 ------------------
 Usage: `create_root_ca.sh <directory to place CA> [number of years CA cert is valid (default: 20)]`
